@@ -1,0 +1,102 @@
+{
+  "theme": "Neo-Fintech High-Contrast Dark",
+  "general_guidelines": [
+    "Strictly follow the Dark Theme. Avoid light theme entirely unless explicitly toggled, but optimize for Dark Mode.",
+    "Do not use generic 'SaaS Blue' or 'AI Purple'. Rely on deep black with stark white text and neon accents.",
+    "Use generous padding. E.g., cards should have p-6 or p-8.",
+    "Apply 1px borders to all containers to simulate a 'Technical/Grid' look.",
+    "Never center text blindly. Use optical alignment and prioritize left-aligned data streams.",
+    "All interactive and key informational elements MUST include a `data-testid` attribute to facilitate robust automated testing."
+  ],
+  "typography": {
+    "headings": {
+      "family": "Cabinet Grotesk, sans-serif",
+      "classes": "font-bold tracking-tight",
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tighter",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl",
+      "h3": "text-xl sm:text-2xl"
+    },
+    "body": {
+      "family": "Manrope, sans-serif",
+      "classes": "text-base tracking-normal leading-relaxed text-zinc-400"
+    },
+    "numbers_and_data": {
+      "family": "JetBrains Mono, monospace",
+      "classes": "tracking-tight tabular-nums",
+      "usage": "Use for all balances, transaction amounts, and chart labels."
+    }
+  },
+  "colors": {
+    "background": {
+      "main": "#050505",
+      "tailwind": "bg-[#050505]"
+    },
+    "surfaces": {
+      "card": "#0A0A0A",
+      "card_hover": "#111111",
+      "tailwind": "bg-[#0A0A0A] hover:bg-[#111111]"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A1A1AA",
+      "muted": "#71717A"
+    },
+    "accents": {
+      "positive_income": "#00FF9D",
+      "negative_expense": "#FF3366",
+      "primary_action": "#FFFFFF",
+      "primary_action_text": "#000000",
+      "highlight": "#FAFF00"
+    },
+    "borders": {
+      "default": "rgba(255, 255, 255, 0.1)",
+      "tailwind": "border-white/10"
+    }
+  },
+  "layouts": {
+    "dashboard_grid": "Bento Grid Protocol Mode B (High Density). Base: grid-cols-1 md:grid-cols-3 lg:grid-cols-4. Gap: gap-4 or gap-6.",
+    "spacing": "Use p-6 or p-8 for inner card padding. Separate major sections with py-12.",
+    "header": "Crystal Glassmorphism variant: sticky top-0 z-50 bg-black/60 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10"
+  },
+  "components": {
+    "buttons": "Pill-shaped (rounded-full) or completely sharp (rounded-none). Primary CTAs are bg-white text-black hover:bg-zinc-200 transition-colors. No generic blue buttons.",
+    "cards": "Flat background (bg-[#0A0A0A]), 1px border (border-white/10), no heavy drop shadows. On hover, translate-y-[-2px] and subtle border glow.",
+    "inputs": "Shadcn components heavily customized. bg-transparent border-white/10 text-white focus:ring-1 focus:ring-[#00FF9D]. No Vercel default look.",
+    "toast": "Use Sonner. Dark mode variant with border-white/10 and neon accent lines for success/error.",
+    "receipt_upload": "Dashed border area (border-white/20 border-dashed) with hover state turning border-[#00FF9D]. Include micro-animation for upload."
+  },
+  "data_visualization": {
+    "library": "recharts or shadcn/ui charts",
+    "pie_chart": "Monochrome or High-Contrast Neon lines. No solid fills-use stroke (strokeWidth 2) for an 'x-ray' technical feel, or strict flat colors without gradients.",
+    "bar_chart": "Brutalist bars. bg-white/20 base, bg-white on hover. Sharp edges (no rounded corners).",
+    "line_chart": "Main stroke color: #00FF9D. Area gradient: from-[#00FF9D]/20 to-transparent. strokeWidth: 2."
+  },
+  "visual_enhancers": {
+    "glassmorphism": "Only for headers/navs. bg-black/60 backdrop-blur-2xl border-white/10.",
+    "textures": "Overlay a fixed subtle noise texture (opacity-5) across the entire background to kill 'digital flatness'.",
+    "animations": "Framer motion for staggered list entrance. Micro-animations on hover (scale 1.02 for cards)."
+  },
+  "images": {
+    "receipt_placeholder": {
+      "url": "https://images.unsplash.com/photo-1769985840494-32e240087fa4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTF8MHwxfHNlYXJjaHwxfHxjYWZlJTIwcmVjZWlwdCUyMGRhcmt8ZW58MHx8fHwxNzgzNjA3NTUwfDA&ixlib=rb-4.1.0&q=85",
+      "description": "Paper receipt on dark table, used for OCR mock/preview"
+    },
+    "user_avatar": {
+      "url": "https://images.unsplash.com/photo-1760800185531-2b1da99d7538?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDV8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBwZXJzb24lMjBwb3J0cmFpdCUyMGRhcmslMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc4MzYwNzU1MHww&ixlib=rb-4.1.0&q=85",
+      "description": "Neon-lit user portrait for profile avatar"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Install required fonts from Google Fonts: Cabinet Grotesk (or substitute with Clash Display/Outfit), JetBrains Mono, Manrope.",
+    "Install lucide-react or @phosphor-icons/react for premium icons.",
+    "Strictly avoid #7351B7 (purple gradients) and #1B93A4 (teal). Use the specific neon accents defined (#00FF9D, #FF3366).",
+    "Implement a noise overlay over the main background layout for texture.",
+    "Use grid lines (border-white/10) extensively in the dashboard to create a technical 'Bento' look.",
+    "Ensure all numbers (balances, amounts) use JetBrains Mono with tabular-nums enabled to prevent layout shifting.",
+    "Do NOT center align the app container. Maintain strict left-alignment for data lists.",
+    "Add data-testid attributes to all form inputs, buttons, and transaction rows for robust testing.",
+    "Create new components matching the dark, high-contrast, technical style of the customized Shadcn primitives.",
+    "Use js files and jsx files. Do not generate TypeScript (.tsx/.ts) code.",
+    "Implement Sonner toast notifications exclusively for success, error, and OCR feedback states."
+  ]
+}
