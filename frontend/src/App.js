@@ -1,55 +1,85 @@
-import { useEffect } from "react";
+import React from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
-import { HOME } from "@/constants/testIds";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
+import { Toaster } from "sonner";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import AuthCallback from "@/components/AuthCallback";
+import Layout from "@/components/Layout";
+import Login from "@/pages/Login";
+import Signup from "@/pages/Signup";
+import Dashboard from "@/pages/Dashboard";
+import Transactions from "@/pages/Transactions";
+import Analytics from "@/pages/Analytics";
+import Profile from "@/pages/Profile";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+function AppRouter() {
+  const location = useLocation();
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
-
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
+  // Handle OAuth callback synchronously during render, before other routes
+  if (location.hash && location.hash.includes("session_id=")) {
+    return <AuthCallback />;
+  }
 
   return (
-    <div>
-      <header className="App-header">
-        <a
-          data-testid={HOME.emergentLink}
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Layout><Dashboard /></Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/transactions"
+        element={
+          <ProtectedRoute>
+            <Layout><Transactions /></Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute>
+            <Layout><Analytics /></Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Layout><Profile /></Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    </Routes>
   );
-};
+}
 
 function App() {
   return (
-    <div className="App">
+    <ThemeProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
+        <AuthProvider>
+          <AppRouter />
+          <Toaster
+            position="top-right"
+            theme="dark"
+            toastOptions={{
+              className: "!bg-[#0A0A0A] !border !border-white/10 !text-white font-mono-tab",
+            }}
+          />
+        </AuthProvider>
       </BrowserRouter>
-    </div>
+    </ThemeProvider>
   );
 }
 
