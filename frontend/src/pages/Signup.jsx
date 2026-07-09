@@ -46,7 +46,7 @@ export default function Signup() {
             <Wallet className="w-5 h-5" strokeWidth={2.5} />
           </div>
           <div>
-            <div className="font-display font-bold text-lg">Ledgerly</div>
+            <div className="font-display font-bold text-lg tracking-tight">iEXPENSES</div>
             <div className="text-[10px] uppercase tracking-widest text-zinc-500">/ Create account</div>
           </div>
         </div>

@@ -63,7 +63,7 @@ export default function Layout({ children }) {
             <Wallet className="w-5 h-5" strokeWidth={2.5} />
           </div>
           <div>
-            <div className="font-display font-bold text-lg leading-none">Ledgerly</div>
+            <div className="font-display font-bold text-lg leading-none tracking-tight">iEXPENSES</div>
             <div className="text-[10px] uppercase tracking-widest text-zinc-500 mt-1">Neo Fintech</div>
           </div>
         </Link>
@@ -114,7 +114,7 @@ export default function Layout({ children }) {
         >
           <Menu className="w-5 h-5" />
         </button>
-        <div className="font-display font-bold text-lg">Ledgerly</div>
+        <div className="font-display font-bold text-lg tracking-tight">iEXPENSES</div>
         <button
           data-testid="mobile-theme-toggle"
           onClick={toggle}
@@ -132,7 +132,7 @@ export default function Layout({ children }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-6">
-              <div className="font-display font-bold text-lg">Ledgerly</div>
+              <div className="font-display font-bold text-lg tracking-tight">iEXPENSES</div>
               <button data-testid="mobile-drawer-close" onClick={() => setMobileOpen(false)} className="p-2">
                 <X className="w-5 h-5" />
               </button>

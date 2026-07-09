@@ -30,7 +30,7 @@ JWT_ALG = os.environ.get('JWT_ALG', 'HS256')
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY', '')
 EMERGENT_AUTH_URL = "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data"
 
-app = FastAPI(title="Ledgerly – Expense Tracker API")
+app = FastAPI(title="iEXPENSES – Expense Tracker API")
 api_router = APIRouter(prefix="/api")
 
 logger = logging.getLogger("expense")

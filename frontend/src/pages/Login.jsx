@@ -46,7 +46,7 @@ export default function Login() {
             <div className="w-11 h-11 rounded-xl bg-[#00FF9D] text-black flex items-center justify-center">
               <Wallet className="w-6 h-6" strokeWidth={2.5} />
             </div>
-            <div className="font-display font-bold text-2xl">Ledgerly</div>
+            <div className="font-display font-bold text-2xl tracking-tight">iEXPENSES</div>
           </div>
           <h1 className="font-display text-5xl lg:text-6xl font-bold tracking-tighter leading-[1.02]">
             Your money,
