@@ -383,6 +383,7 @@ async def delete_expense(expense_id: str, user: dict = Depends(get_current_user)
 # ================== ANALYTICS ==================
 def _bucket_start(dt: datetime, period: str) -> str:
     dt = dt.astimezone(timezone.utc)
+    b = dt
     if period == "daily":
         b = dt.replace(hour=0, minute=0, second=0, microsecond=0)
     elif period == "weekly":
@@ -391,8 +392,6 @@ def _bucket_start(dt: datetime, period: str) -> str:
         b = dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     elif period == "yearly":
         b = dt.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
-    else:
-        b = dt
     return b.date().isoformat() if period != "yearly" else str(b.year)
 
 @api_router.get("/analytics/summary")

@@ -11,7 +11,10 @@ export function AuthProvider({ children }) {
     try {
       const { data } = await api.get("/auth/me");
       setUser(data);
-    } catch {
+    } catch (err) {
+      if (err?.response?.status && err.response.status !== 401) {
+        console.warn("auth/me failed:", err?.message || err);
+      }
       setUser(null);
     } finally {
       setLoading(false);
@@ -42,7 +45,11 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    try { await api.post("/auth/logout"); } catch {}
+    try {
+      await api.post("/auth/logout");
+    } catch (err) {
+      console.warn("Logout request failed:", err?.message || err);
+    }
     localStorage.removeItem("auth_token");
     setUser(null);
   };

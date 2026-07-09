@@ -14,6 +14,10 @@ import Transactions from "@/pages/Transactions";
 import Analytics from "@/pages/Analytics";
 import Profile from "@/pages/Profile";
 
+const TOASTER_OPTIONS = {
+  className: "!bg-[#0A0A0A] !border !border-white/10 !text-white font-mono-tab",
+};
+
 function AppRouter() {
   const location = useLocation();
 
@@ -73,9 +77,7 @@ function App() {
           <Toaster
             position="top-right"
             theme="dark"
-            toastOptions={{
-              className: "!bg-[#0A0A0A] !border !border-white/10 !text-white font-mono-tab",
-            }}
+            toastOptions={TOASTER_OPTIONS}
           />
         </AuthProvider>
       </BrowserRouter>

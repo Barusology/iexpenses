@@ -13,8 +13,8 @@ import requests
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://fintech-dash-68.preview.emergentagent.com").rstrip("/")
 API = f"{BASE_URL}/api"
 
-DEMO_EMAIL = "demo@ledgerly.app"
-DEMO_PASSWORD = "Demo1234!"
+DEMO_EMAIL = os.environ.get("DEMO_EMAIL", "demo@ledgerly.app")
+DEMO_PASSWORD = os.environ.get("DEMO_PASSWORD", "Demo1234!")
 
 
 # ------------------------- Fixtures -------------------------

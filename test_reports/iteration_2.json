@@ -1,0 +1,33 @@
+{
+  "summary": "Regression sweep after code-review fixes (backend _bucket_start refactor, env-configurable demo creds, AuthContext warnings, ThemeContext memoization, Toaster module scope, Ledgerly -> iEXPENSES rename). All 26/26 backend pytest cases passed, including OCR live Gemini 3 flash call, analytics for all 4 periods (daily/weekly/monthly/yearly) still returning identical shape with keys total_all_time/current_period_total/period/trend/category_breakdown/recent/weekly_bars/transaction_count/currency, and Emergent OAuth /api/auth/session invalid-id -> 401. Frontend Playwright regression: login+signup render, title is 'iEXPENSES - Personal Expense Tracker', brand text 'iEXPENSES' appears on Login/Signup/Sidebar, demo login -> dashboard with all 4 stat cards and 4 chart panels, expense create via sidebar-add-expense-btn persists (verified via /transactions filter), transactions filters + edit + delete confirmed, analytics daily/weekly/monthly/yearly toggles all clickable, profile save works, theme-dark/theme-light-btn flips html root class dark<->light, both profile-logout-btn and sidebar-logout-btn navigate to /login. Zero console errors. Zero regressions.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Dashboard charts (recharts)", "issues": ["Same as iteration 1 - recharts still emits 'width(-1) and height(-1) of chart should be greater than 0' warnings on mount. Non-blocking, charts render correctly. Suggest passing minWidth={0} or mount-guard."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "(Optional / pre-existing, not a regression) Dashboard recent-expenses-panel does not refresh immediately after ExpenseModal save from sidebar/topbar; it only refreshes on the 30s polling interval. Consider passing an onSaved callback from Layout's ExpenseModal to trigger a global refresh or use React Query invalidation. Persistence itself works (verified via /transactions search)."
+  ],
+  "critical_code_review_comments": [
+    "server.py _bucket_start refactor is safe - `b = dt` initialization before conditional reassignment does not change any output because every code path either reassigns b or, for period='yearly', still returns str(b.year) equivalent to dt.year (since b=dt at that point; but note the yearly branch DOES reassign b to Jan 1). All 4 period tests still pass identically.",
+    "ThemeContext memoization via useMemo is correct - value only changes when [theme, toggle] change; toggle is inside setter reference so identity is stable.",
+    "AuthContext empty-catch now console.warn - improves debuggability without behavior change.",
+    "Toaster options extracted to module scope - avoids re-creating object on every App render; correct optimization.",
+    "Brand rename 'iEXPENSES' consistently applied across Layout.jsx (sidebar + mobile drawer + brand cell), Login.jsx, Signup.jsx, and public/index.html <title>."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (26/26)", "frontend": "100% (all 8 regression flows)"},
+  "test_credentials": "demo@ledgerly.app / Demo1234! (from /app/memory/test_credentials.md - unchanged, works out of the box)",
+  "seed_data_creation": "Test created a TEST_UI_Cafe_v2 expense during flow, then edited it, then deleted it - clean up complete. Demo user's prior Cafe Aurora / 450.50 INR seed entry remains from iteration 1.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "This iteration was a pure regression sweep after low-risk internal refactors. Both backend (26/26) and frontend (all data-testid flows) pass with zero console errors and zero regressions. The only carry-over item from iteration 1 is the cosmetic recharts size-warning on mount. Dashboard's recent panel not immediately reflecting new expenses is pre-existing (not a regression). All brand references now say iEXPENSES.",
+  "rca of the issue": "No blocking issue in this iteration. Refactor of _bucket_start verified via TestAnalytics.test_summary_periods[daily/weekly/monthly/yearly] - all pass with identical response shape."
+}
