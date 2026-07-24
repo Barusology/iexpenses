@@ -21,8 +21,9 @@ const TOASTER_OPTIONS = {
 function AppRouter() {
   const location = useLocation();
 
-  // Handle OAuth callback synchronously during render, before other routes
-  if (location.hash && location.hash.includes("session_id=")) {
+  const hasCode = new URLSearchParams(location.search).has("code");
+  const hasToken = location.hash && (location.hash.includes("access_token=") || location.hash.includes("id_token="));
+  if (hasCode || hasToken) {
     return <AuthCallback />;
   }
 

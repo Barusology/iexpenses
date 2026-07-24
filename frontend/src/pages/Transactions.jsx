@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
+import { supabase } from "@/lib/supabase";
+
 export default function Transactions() {
   const { user } = useAuth();
   const [expenses, setExpenses] = useState([]);
@@ -31,13 +33,34 @@ export default function Transactions() {
   const load = async () => {
     setLoading(true);
     try {
-      const params = {};
-      if (q) params.q = q;
-      if (category && category !== "all") params.category = category;
-      if (start) params.start = start;
-      if (end) params.end = end;
-      const { data } = await api.get("/expenses", { params });
-      setExpenses(data);
+      let queryBuilder = supabase.from('expenses').select('*');
+      
+      if (category && category !== "all") {
+        queryBuilder = queryBuilder.eq('category', category);
+      }
+      if (start) {
+        queryBuilder = queryBuilder.gte('date', start + "T00:00:00+00:00");
+      }
+      if (end) {
+        queryBuilder = queryBuilder.lte('date', end + "T23:59:59.999999+00:00");
+      }
+      
+      const { data, error } = await queryBuilder.order('date', { ascending: false });
+      if (error) throw error;
+      
+      let filtered = data || [];
+      if (q) {
+        const queryText = q.toLowerCase();
+        filtered = filtered.filter(e => 
+          (e.merchant && e.merchant.toLowerCase().includes(queryText)) ||
+          (e.note && e.note.toLowerCase().includes(queryText))
+        );
+      }
+      
+      setExpenses(filtered);
+    } catch (e) {
+      console.error(e);
+      toast.error("Could not load transactions");
     } finally {
       setLoading(false);
     }
@@ -54,10 +77,11 @@ export default function Transactions() {
   const handleDelete = async () => {
     if (!deleteId) return;
     try {
-      await api.delete(`/expenses/${deleteId}`);
+      const { error } = await supabase.from('expenses').delete().eq('id', deleteId);
+      if (error) throw error;
       toast.success("Expense deleted");
       setExpenses((prev) => prev.filter((e) => e.id !== deleteId));
-    } catch {
+    } catch (e) {
       toast.error("Could not delete");
     } finally {
       setDeleteId(null);

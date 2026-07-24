@@ -7,12 +7,18 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Wallet, Loader2, ArrowRight } from "lucide-react";
 
-/**
- * REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
- */
-function googleLogin() {
-  const redirectUrl = window.location.origin + "/dashboard";
-  window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+import { supabase } from "@/lib/supabase";
+
+async function googleLogin() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: window.location.origin + "/dashboard",
+    },
+  });
+  if (error) {
+    toast.error(error.message);
+  }
 }
 
 export default function Signup() {
@@ -31,7 +37,7 @@ export default function Signup() {
       toast.success("Account created");
       navigate("/dashboard");
     } catch (err) {
-      toast.error(err.response?.data?.detail || "Sign up failed");
+      toast.error(err.message || "Sign up failed");
     } finally {
       setLoading(false);
     }

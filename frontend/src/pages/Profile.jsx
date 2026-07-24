@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
-import api from "@/lib/api";
+import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,15 +19,22 @@ export default function Profile() {
   const [name, setName] = useState(user?.name || "");
   const [currency, setCurrency] = useState(user?.currency || "INR");
   const [saving, setSaving] = useState(false);
-
   const save = async () => {
     setSaving(true);
     try {
-      await api.put("/users/me", { name, currency, theme });
+      const userId = user?.id || user?.user_id;
+      if (!userId) throw new Error("No authenticated user session");
+      const { error } = await supabase.from('users').upsert({
+        id: userId,
+        name,
+        currency,
+        theme
+      });
+      if (error) throw error;
       await refreshUser();
       toast.success("Profile updated");
     } catch (e) {
-      toast.error("Could not update profile");
+      toast.error(e.message || "Could not update profile");
     } finally {
       setSaving(false);
     }

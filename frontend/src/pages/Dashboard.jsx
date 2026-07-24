@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import api from "@/lib/api";
+import { supabase } from "@/lib/supabase";
+import { computeAnalyticsSummary } from "@/lib/analytics";
 import StatCard from "@/components/StatCard";
 import { formatMoney, formatShort } from "@/lib/currency";
 import { categoryMeta } from "@/lib/categories";
@@ -18,18 +19,22 @@ export default function Dashboard() {
   const load = async () => {
     setLoading(true);
     try {
-      const { data } = await api.get("/analytics/summary", { params: { period: "monthly" } });
-      setSummary(data);
+      const { data, error } = await supabase.from('expenses').select('*');
+      if (error) throw error;
+      const summaryData = computeAnalyticsSummary(data, "monthly", user?.currency || "INR");
+      setSummary(summaryData);
+    } catch (e) {
+      console.error("Failed to load dashboard summary:", e);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [user?.currency]);
   useEffect(() => {
     const t = setInterval(load, 30000); // refresh every 30s to reflect new expenses
     return () => clearInterval(t);
-  }, []);
+  }, [user?.currency]);
 
   const cur = user?.currency || "INR";
   const total = summary?.total_all_time || 0;

@@ -11,6 +11,7 @@ import { Upload, Sparkles, Loader2, X, Camera } from "lucide-react";
 import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
+import { supabase } from "@/lib/supabase";
 
 export default function ExpenseModal({ open, onOpenChange, existing, onSaved }) {
   const { user } = useAuth();
@@ -87,21 +88,24 @@ export default function ExpenseModal({ open, onOpenChange, existing, onSaved }) 
         category,
         merchant,
         note,
-        date,
+        date: new Date(date).toISOString(),
         currency,
         receipt_base64: receipt || null,
+        user_id: user.user_id || user.id,
       };
       if (existing?.id) {
-        await api.put(`/expenses/${existing.id}`, payload);
+        const { error } = await supabase.from('expenses').update(payload).eq('id', existing.id);
+        if (error) throw error;
         toast.success("Expense updated");
       } else {
-        await api.post("/expenses", payload);
+        const { error } = await supabase.from('expenses').insert([payload]);
+        if (error) throw error;
         toast.success("Expense recorded");
       }
       onOpenChange(false);
       onSaved && onSaved();
     } catch (e) {
-      toast.error(e.response?.data?.detail || "Could not save expense");
+      toast.error(e.message || "Could not save expense");
     } finally {
       setSaving(false);
     }

@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
-import api from "@/lib/api";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 const AuthContext = createContext(null);
 
@@ -7,57 +7,62 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const checkAuth = useCallback(async () => {
-    try {
-      const { data } = await api.get("/auth/me");
-      setUser(data);
-    } catch (err) {
-      if (err?.response?.status && err.response.status !== 401) {
-        console.warn("auth/me failed:", err?.message || err);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        fetchProfile(session.user);
+      } else {
+        setUser(null);
+        setLoading(false);
       }
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        fetchProfile(session.user);
+      } else {
+        setUser(null);
+        setLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    // If returning from OAuth callback, skip /me – AuthCallback handles it.
-    if (typeof window !== "undefined" && window.location.hash?.includes("session_id=")) {
-      setLoading(false);
-      return;
+  const fetchProfile = async (authUser) => {
+    const { data } = await supabase.from('users').select('*').eq('id', authUser.id).single();
+    if (data) {
+      setUser({ ...authUser, ...data, user_id: authUser.id }); // preserve user_id compatibility
+    } else {
+      setUser({ ...authUser, user_id: authUser.id });
     }
-    checkAuth();
-  }, [checkAuth]);
+    setLoading(false);
+  };
 
   const loginWithEmail = async (email, password) => {
-    const { data } = await api.post("/auth/login", { email, password });
-    localStorage.setItem("auth_token", data.token);
-    setUser(data.user);
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
     return data.user;
   };
 
   const registerWithEmail = async (email, password, name) => {
-    const { data } = await api.post("/auth/register", { email, password, name });
-    localStorage.setItem("auth_token", data.token);
-    setUser(data.user);
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: name } }
+    });
+    if (error) throw error;
     return data.user;
   };
 
   const logout = async () => {
-    try {
-      await api.post("/auth/logout");
-    } catch (err) {
-      console.warn("Logout request failed:", err?.message || err);
-    }
-    localStorage.removeItem("auth_token");
+    await supabase.auth.signOut();
     setUser(null);
   };
 
   const refreshUser = async () => {
-    const { data } = await api.get("/auth/me");
-    setUser(data);
-    return data;
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) await fetchProfile(session.user);
   };
 
   const value = { user, setUser, loading, loginWithEmail, registerWithEmail, logout, refreshUser };

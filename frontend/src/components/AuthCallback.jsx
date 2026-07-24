@@ -1,47 +1,29 @@
-import React, { useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import api from "@/lib/api";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 
-/**
- * REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
- * Handles the Emergent OAuth callback. Reads session_id from URL fragment,
- * exchanges via backend, then navigates to /dashboard.
- */
 export default function AuthCallback() {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { setUser } = useAuth();
-  const hasProcessed = useRef(false);
+  const { user } = useAuth();
 
   useEffect(() => {
-    if (hasProcessed.current) return;
-    hasProcessed.current = true;
-
-    const hash = location.hash || window.location.hash || "";
-    const params = new URLSearchParams(hash.startsWith("#") ? hash.slice(1) : hash);
-    const sessionId = params.get("session_id");
-
-    if (!sessionId) {
-      navigate("/login", { replace: true });
-      return;
+    if (user) {
+      navigate("/dashboard", { replace: true });
+      toast.success(`Welcome, ${user.name || user.email}`);
     }
+  }, [user, navigate]);
 
-    (async () => {
-      try {
-        const { data } = await api.post("/auth/session", { session_id: sessionId });
-        setUser(data.user);
-        // Clear the fragment
-        window.history.replaceState({}, document.title, "/dashboard");
-        navigate("/dashboard", { replace: true, state: { user: data.user } });
-        toast.success(`Welcome, ${data.user.name || data.user.email}`);
-      } catch (e) {
-        toast.error("Google sign-in failed. Please try again.");
+  useEffect(() => {
+    // Timeout fallback after 10s of spinner
+    const t = setTimeout(() => {
+      if (!user) {
+        toast.error("Authentication timed out.");
         navigate("/login", { replace: true });
       }
-    })();
-  }, [location, navigate, setUser]);
+    }, 10000);
+    return () => clearTimeout(t);
+  }, [user, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--surface-0)]">

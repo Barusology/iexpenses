@@ -7,6 +7,9 @@ import {
   PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, AreaChart, Area, CartesianGrid, Legend,
 } from "recharts";
 
+import { supabase } from "@/lib/supabase";
+import { computeAnalyticsSummary } from "@/lib/analytics";
+
 const PERIODS = [
   { id: "daily", label: "Daily" },
   { id: "weekly", label: "Weekly" },
@@ -23,14 +26,18 @@ export default function Analytics() {
   const load = async (p) => {
     setLoading(true);
     try {
-      const { data } = await api.get("/analytics/summary", { params: { period: p } });
-      setData(data);
+      const { data: rawExpenses, error } = await supabase.from('expenses').select('*');
+      if (error) throw error;
+      const summaryData = computeAnalyticsSummary(rawExpenses, p, user?.currency || "INR");
+      setData(summaryData);
+    } catch (e) {
+      console.error("Failed to load analytics summary:", e);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { load(period); }, [period]);
+  useEffect(() => { load(period); }, [period, user?.currency]);
 
   const cur = user?.currency || "INR";
   const catData = data?.category_breakdown || [];
@@ -164,7 +171,8 @@ export default function Analytics() {
         </div>
         <div className="divide-y divide-white/5">
           {catData.map((c) => {
-            const pct = data?.total_all_time ? (c.amount / data.total_all_time) * 100 : 0;
+            const totalForCats = catData.reduce((acc, curr) => acc + curr.amount, 0);
+            const pct = totalForCats ? (c.amount / totalForCats) * 100 : 0;
             return (
               <div key={c.id} className="py-3">
                 <div className="flex items-center justify-between mb-2">
