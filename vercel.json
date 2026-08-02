@@ -1,0 +1,11 @@
+{
+  "installCommand": "cd frontend && npm ci --legacy-peer-deps && npm install --no-save ajv@^8.20.0 --legacy-peer-deps",
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/build",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
