@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { formatMoney, formatShort } from "@/lib/currency";
@@ -23,7 +23,7 @@ export default function Analytics() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const load = async (p) => {
+  const load = useCallback(async (p) => {
     setLoading(true);
     try {
       const { data: rawExpenses, error } = await supabase.from('expenses').select('*');
@@ -35,9 +35,9 @@ export default function Analytics() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.currency]);
 
-  useEffect(() => { load(period); }, [period, user?.currency]);
+  useEffect(() => { load(period); }, [period, load]);
 
   const cur = user?.currency || "INR";
   const catData = data?.category_breakdown || [];

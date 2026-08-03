@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { formatMoney } from "@/lib/currency";
@@ -30,7 +30,7 @@ export default function Transactions() {
   const [deleteId, setDeleteId] = useState(null);
   const [receiptView, setReceiptView] = useState(null);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       let queryBuilder = supabase.from('expenses').select('*');
@@ -64,13 +64,13 @@ export default function Transactions() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [category, start, end, q]);
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [load]);
   useEffect(() => {
     const t = setTimeout(load, 250);
     return () => clearTimeout(t);
-  }, [q, category, start, end]);
+  }, [load]);
 
   const total = useMemo(() => expenses.reduce((a, b) => a + b.amount, 0), [expenses]);
 

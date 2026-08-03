@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
 import { computeAnalyticsSummary } from "@/lib/analytics";
@@ -16,7 +16,7 @@ export default function Dashboard() {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       const { data, error } = await supabase.from('expenses').select('*');
@@ -28,13 +28,13 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.currency]);
 
-  useEffect(() => { load(); }, [user?.currency]);
+  useEffect(() => { load(); }, [load]);
   useEffect(() => {
     const t = setInterval(load, 30000); // refresh every 30s to reflect new expenses
     return () => clearInterval(t);
-  }, [user?.currency]);
+  }, [load]);
 
   const cur = user?.currency || "INR";
   const total = summary?.total_all_time || 0;
