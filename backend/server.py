@@ -16,11 +16,8 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # ---- Config ----
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://mnmvxakeigshvdopfvjp.supabase.co")
-SUPABASE_ANON_KEY = os.environ.get(
-    "SUPABASE_ANON_KEY",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ubXZ4YWtlaWdzaHZkb3BmdmpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2MDE4NzAsImV4cCI6MjA5OTE3Nzg3MH0.EMZDbY05xJVFSPCuJHGg6iTcPAHobknnM1oafjJmuEs"
-)
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+SUPABASE_ANON_KEY = os.environ.get("SUPABASE_ANON_KEY", "")
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY', '')
 
 app = FastAPI(title="iEXPENSES – Expense Tracker API (OCR Service)")
