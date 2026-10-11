@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
@@ -84,6 +84,18 @@ function AppRoutes() {
 
 function AppRouter() {
   const location = useLocation();
+
+  // gtag.js already records the initial load, so only report the client-side
+  // navigations that follow — otherwise the landing page double-counts.
+  const lastUrl = useRef(window.location.href);
+  useEffect(() => {
+    if (window.location.href === lastUrl.current) return;
+    lastUrl.current = window.location.href;
+    window.gtag("event", "page_view", {
+      page_location: window.location.href,
+      page_referrer: document.referrer,
+    });
+  }, [location]);
 
   const hasCode = new URLSearchParams(location.search).has("code");
   const hasToken = location.hash && (location.hash.includes("access_token=") || location.hash.includes("id_token="));
