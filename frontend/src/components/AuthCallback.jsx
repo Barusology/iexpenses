@@ -26,10 +26,13 @@ export default function AuthCallback() {
   }, [user, navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--surface-0)]">
+    <div className="min-h-screen grain-overlay flex items-center justify-center bg-surface-0 text-ink-1">
       <div className="text-center">
-        <div className="w-10 h-10 rounded-full border-2 border-white/20 border-t-[#00FF9D] animate-spin mx-auto" />
-        <p className="mt-4 text-zinc-400 font-mono-tab text-sm" data-testid="auth-callback-status">
+        <div
+          className="w-10 h-10 rounded-full border-2 animate-spin mx-auto"
+          style={{ borderColor: "var(--hairline-strong)", borderTopColor: "var(--brand)" }}
+        />
+        <p className="mt-4 text-ink-2 font-mono-tab text-sm" data-testid="auth-callback-status">
           Securing your session…
         </p>
       </div>

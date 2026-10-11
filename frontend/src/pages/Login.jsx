@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Wallet, Loader2, ArrowRight } from "lucide-react";
+import { AmbientStage, MaskLine, Fade, Stagger, Reveal, EASE_CINEMATIC } from "@/components/motion";
 
 import { supabase } from "@/lib/supabase";
 
@@ -20,6 +22,12 @@ async function googleLogin() {
     toast.error(error.message);
   }
 }
+
+const PROOF = [
+  { k: "Receipts", v: "AI OCR" },
+  { k: "Charts", v: "Pie / Bar / Line" },
+  { k: "Currency", v: "9 supported" },
+];
 
 export default function Login() {
   const { loginWithEmail } = useAuth();
@@ -43,53 +51,69 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen auth-mesh grain-overlay flex items-center justify-center p-4 relative">
-      <div className="fixed inset-0 grid-backdrop pointer-events-none opacity-40" />
+    <div className="min-h-screen grain-overlay relative flex items-center justify-center p-4 bg-surface-0 text-ink-1">
+      <AmbientStage intensity={1.15} />
+
       <div className="relative z-10 grid lg:grid-cols-2 gap-10 items-center w-full max-w-6xl">
         {/* Left brand pane */}
         <div className="hidden lg:block">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-11 h-11 rounded-xl bg-[#00FF9D] text-black flex items-center justify-center">
-              <Wallet className="w-6 h-6" strokeWidth={2.5} />
-            </div>
-            <div className="font-display font-bold text-2xl tracking-tight">iEXPENSES</div>
-          </div>
-          <h1 className="font-display text-5xl lg:text-6xl font-bold tracking-tighter leading-[1.02]">
-            Your money,
-            <br />
-            <span className="text-[#00FF9D]">observed.</span>
-          </h1>
-          <p className="mt-6 text-zinc-400 text-base max-w-md leading-relaxed">
-            High-signal expense tracking with receipt OCR, precise analytics, and multi-currency support.
-            Built for people who hate spreadsheets.
-          </p>
-          <div className="mt-10 grid grid-cols-3 gap-4 max-w-md">
-            {[
-              { k: "Receipts", v: "AI OCR" },
-              { k: "Charts", v: "Pie / Bar / Line" },
-              { k: "Currency", v: "9 supported" },
-            ].map((s) => (
-              <div key={s.k} className="rounded-lg border border-white/10 p-3">
-                <div className="text-[10px] uppercase tracking-widest text-zinc-500">{s.k}</div>
-                <div className="mt-1 font-mono-tab text-sm">{s.v}</div>
+          <Fade>
+            <div className="flex items-center gap-3 mb-8">
+              <div
+                className="w-11 h-11 rounded-xl grid place-items-center shadow-lift"
+                style={{ background: "var(--brand)", color: "var(--brand-fg)" }}
+              >
+                <Wallet className="w-6 h-6" strokeWidth={2.5} />
               </div>
+              <div className="font-display font-bold text-2xl tracking-tight">iEXPENSES</div>
+            </div>
+          </Fade>
+
+          <h1 className="font-display text-5xl xl:text-6xl font-bold leading-[1.02]">
+            <MaskLine delay={0.12}>Your money,</MaskLine>
+            <MaskLine delay={0.24}>
+              <span style={{ color: "var(--brand)" }}>observed.</span>
+            </MaskLine>
+          </h1>
+
+          <Fade delay={0.42}>
+            <p className="mt-6 text-ink-2 text-base max-w-md leading-relaxed">
+              High-signal expense tracking with receipt OCR, precise analytics, and multi-currency
+              support. Built for people who hate spreadsheets.
+            </p>
+          </Fade>
+
+          <Stagger className="grid grid-cols-3 gap-4 max-w-md mt-10" delay={0.1}>
+            {PROOF.map((s) => (
+              <Reveal key={s.k}>
+                <div className="rounded-xl border border-hairline p-3 bg-surface-1/40 backdrop-blur-sm theme-fade">
+                  <div className="text-[10px] uppercase tracking-widest text-ink-3">{s.k}</div>
+                  <div className="mt-1 font-mono-tab text-sm text-ink-1">{s.v}</div>
+                </div>
+              </Reveal>
             ))}
-          </div>
+          </Stagger>
         </div>
 
         {/* Right form pane */}
-        <div className="rounded-2xl border border-white/10 bg-[var(--surface-1)]/80 backdrop-blur-xl p-8 lg:p-10 fade-up">
+        <motion.div
+          initial={{ opacity: 0, y: 26, filter: "blur(12px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.85, ease: EASE_CINEMATIC, delay: 0.15 }}
+          className="rounded-3xl border border-hairline glass p-8 lg:p-10 shadow-key"
+        >
           <div className="mb-6">
-            <div className="text-[10px] uppercase tracking-widest text-[#00FF9D] font-mono-tab mb-2">/ Sign in</div>
+            <div className="kicker mb-2">/ Sign in</div>
             <h2 className="font-display text-3xl font-bold tracking-tight">Access your ledger</h2>
-            <p className="text-sm text-zinc-400 mt-1">Continue with Google or use your email.</p>
+            <p className="text-sm text-ink-2 mt-1">Continue with Google or use your email.</p>
           </div>
 
           <Button
             type="button"
             onClick={googleLogin}
             data-testid="login-google-btn"
-            className="w-full h-11 rounded-full bg-white text-black hover:bg-zinc-200 font-semibold"
+            className="w-full h-11 rounded-full font-semibold border border-hairline"
+            style={{ background: "var(--ink-1)", color: "var(--surface-0)" }}
           >
             <svg viewBox="0 0 24 24" className="w-4 h-4 mr-2" aria-hidden>
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.75h3.57c2.08-1.92 3.28-4.74 3.28-8.07z"/>
@@ -101,14 +125,14 @@ export default function Login() {
           </Button>
 
           <div className="my-6 flex items-center gap-3">
-            <div className="h-px flex-1 bg-white/10" />
-            <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-mono-tab">or email</div>
-            <div className="h-px flex-1 bg-white/10" />
+            <div className="h-px flex-1 bg-hairline" />
+            <div className="text-[10px] uppercase tracking-widest text-ink-3 font-mono-tab">or email</div>
+            <div className="h-px flex-1 bg-hairline" />
           </div>
 
           <form onSubmit={submit} className="space-y-4">
             <div>
-              <Label className="text-xs uppercase tracking-widest text-zinc-500">Email</Label>
+              <Label className="text-xs uppercase tracking-widest text-ink-3">Email</Label>
               <Input
                 type="email"
                 required
@@ -116,11 +140,11 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@domain.com"
                 data-testid="login-email-input"
-                className="mt-1.5 bg-transparent border-white/15 h-11"
+                className="mt-1.5 bg-transparent border-hairline-strong h-11 text-ink-1 placeholder:text-ink-3"
               />
             </div>
             <div>
-              <Label className="text-xs uppercase tracking-widest text-zinc-500">Password</Label>
+              <Label className="text-xs uppercase tracking-widest text-ink-3">Password</Label>
               <Input
                 type="password"
                 required
@@ -128,27 +152,33 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 data-testid="login-password-input"
-                className="mt-1.5 bg-transparent border-white/15 h-11"
+                className="mt-1.5 bg-transparent border-hairline-strong h-11 text-ink-1 placeholder:text-ink-3"
               />
             </div>
             <Button
               type="submit"
               disabled={loading}
               data-testid="login-submit-btn"
-              className="w-full h-11 rounded-full bg-[#00FF9D] text-black hover:bg-[#00e58c] font-semibold"
+              className="w-full h-11 rounded-full font-semibold border-0"
+              style={{ background: "var(--brand)", color: "var(--brand-fg)" }}
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <ArrowRight className="w-4 h-4 mr-1" />}
               Sign in
             </Button>
           </form>
 
-          <p className="mt-6 text-sm text-zinc-400 text-center">
+          <p className="mt-6 text-sm text-ink-2 text-center">
             New here?{" "}
-            <Link to="/signup" data-testid="link-to-signup" className="text-[#00FF9D] hover:underline font-medium">
+            <Link
+              to="/signup"
+              data-testid="link-to-signup"
+              className="hover:underline font-medium"
+              style={{ color: "var(--brand)" }}
+            >
               Create an account
             </Link>
           </p>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -43,13 +43,15 @@ export function computeAnalyticsSummary(expenses, period = "monthly", userCurren
     amount: Math.round(amount * 100) / 100
   }));
 
-  // Category breakdown
+  // Category breakdown — carries both theme hexes so the row can be rendered
+  // without a second lookup into CATEGORY_MAP.
   const categoryBreakdown = CATEGORIES.map(cat => {
     const amt = byCategory[cat.id] || 0;
     return {
       id: cat.id,
       name: cat.name,
-      color: cat.color,
+      dark: cat.dark,
+      light: cat.light,
       amount: Math.round(amt * 100) / 100
     };
   })

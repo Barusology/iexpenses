@@ -1,20 +1,46 @@
 import React from "react";
+import { SpotlightCard, CountUp } from "@/components/motion";
 
-export default function StatCard({ label, value, sub, accent = "#FFFFFF", icon: Icon, testid }) {
+/**
+ * Bento stat tile. Pass `value` + `format` for a number that ticks up, or `text`
+ * for a string metric (e.g. the top category name).
+ */
+export default function StatCard({
+  label,
+  value,
+  format,
+  text,
+  sub,
+  accent = "var(--brand)",
+  icon: Icon,
+  testid,
+}) {
   return (
-    <div
-      data-testid={testid}
-      className="relative rounded-xl border border-white/10 bg-[var(--surface-1)] p-6 card-hover overflow-hidden"
-    >
-      <div className="absolute top-0 left-0 w-full h-[2px]" style={{ background: accent }} />
+    <SpotlightCard testid={testid} accent={accent} rule className="p-6 card-hover h-full">
       <div className="flex items-center justify-between">
-        <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-mono-tab">{label}</div>
-        {Icon && <Icon className="w-4 h-4 text-zinc-500" />}
+        <div className="text-[10px] uppercase tracking-widest text-ink-3 font-mono-tab">
+          {label}
+        </div>
+        {Icon && (
+          <span
+            className="w-8 h-8 rounded-lg grid place-items-center border border-hairline transition-colors"
+            style={{ color: accent }}
+          >
+            <Icon className="w-4 h-4" />
+          </span>
+        )}
       </div>
-      <div className="mt-3 font-mono-tab text-3xl font-semibold tracking-tight" style={{ color: accent }}>
-        {value}
+
+      <div
+        className="mt-4 text-3xl font-semibold leading-none"
+        style={{ color: accent }}
+      >
+        {format ? <CountUp value={value} format={format} /> : <span className="font-mono-tab">{text ?? value}</span>}
       </div>
-      {sub && <div className="mt-1 text-xs text-zinc-500">{sub}</div>}
-    </div>
+
+      {sub && (
+        <div className="mt-2 text-xs text-ink-3">{sub}</div>
+      )}
+    </SpotlightCard>
   );
 }
