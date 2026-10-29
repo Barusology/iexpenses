@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Wallet, Loader2, ArrowRight } from "lucide-react";
+import { Wallet, Loader2, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { AmbientStage, MaskLine, Fade, Stagger, Reveal, EASE_CINEMATIC } from "@/components/motion";
 
 import { supabase } from "@/lib/supabase";
@@ -34,6 +34,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const submit = async (e) => {
@@ -145,15 +146,26 @@ export default function Login() {
             </div>
             <div>
               <Label className="text-xs uppercase tracking-widest text-ink-3">Password</Label>
-              <Input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                data-testid="login-password-input"
-                className="mt-1.5 bg-transparent border-hairline-strong h-11 text-ink-1 placeholder:text-ink-3"
-              />
+              <div className="relative mt-1.5">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  data-testid="login-password-input"
+                  className="bg-transparent border-hairline-strong h-11 pr-11 text-ink-1 placeholder:text-ink-3"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((visible) => !visible)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={showPassword}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-sm text-ink-3 hover:text-ink-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" aria-hidden="true" /> : <Eye className="h-4 w-4" aria-hidden="true" />}
+                </button>
+              </div>
             </div>
             <Button
               type="submit"
