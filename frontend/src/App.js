@@ -14,6 +14,10 @@ import Transactions from "@/pages/Transactions";
 import Analytics from "@/pages/Analytics";
 import Profile from "@/pages/Profile";
 import { PageTransition } from "@/components/motion";
+import {
+  getAnalyticsPageLocation,
+  shouldTrackAnalyticsPageView,
+} from "@/lib/analyticsPrivacy";
 
 /**
  * Sonner is frozen to dark in the original build (theme="dark" + !bg-[#0A0A0A]).
@@ -84,18 +88,17 @@ function AppRoutes() {
 
 function AppRouter() {
   const location = useLocation();
-
-  // gtag.js already records the initial load, so only report the client-side
-  // navigations that follow — otherwise the landing page double-counts.
-  const lastUrl = useRef(window.location.href);
+  const pageLocation = getAnalyticsPageLocation(location.pathname);
+  const lastPageLocation = useRef(
+    getAnalyticsPageLocation(window.location.pathname),
+  );
   useEffect(() => {
-    if (window.location.href === lastUrl.current) return;
-    lastUrl.current = window.location.href;
-    window.gtag("event", "page_view", {
-      page_location: window.location.href,
-      page_referrer: document.referrer,
-    });
-  }, [location]);
+    if (!shouldTrackAnalyticsPageView(location)) return;
+    if (pageLocation === lastPageLocation.current) return;
+    lastPageLocation.current = pageLocation;
+    if (typeof window.gtag !== "function") return;
+    window.gtag("event", "page_view", { page_location: pageLocation });
+  }, [location, pageLocation]);
 
   const hasCode = new URLSearchParams(location.search).has("code");
   const hasToken = location.hash && (location.hash.includes("access_token=") || location.hash.includes("id_token="));

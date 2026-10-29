@@ -39,7 +39,20 @@
           function gtag(){dataLayer.push(arguments);} 
           gtag('js', new Date());
 
-          gtag('config', 'G-TC0NR5Q0L9');
+          const analyticsRoutes = new Set([
+            '/',
+            '/login',
+            '/signup',
+            '/dashboard',
+            '/transactions',
+            '/analytics',
+            '/profile',
+          ]);
+          const analyticsPath = analyticsRoutes.has(window.location.pathname)
+            ? window.location.pathname
+            : '/other';
+          gtag('set', 'page_location', window.location.origin + analyticsPath);
+          gtag('config', 'G-TC0NR5Q0L9', { send_page_view: false });
         </script>
     </head>
     <body>
