@@ -1,5 +1,7 @@
 const ANALYTICS_ROUTES = new Set([
   "/",
+  "/expense-tracking-guide",
+  "/privacy",
   "/login",
   "/signup",
   "/dashboard",

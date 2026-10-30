@@ -1,0 +1,115 @@
+import React from "react";
+import PublicSiteLayout from "@/components/PublicSiteLayout";
+
+export default function Privacy() {
+  return (
+    <PublicSiteLayout>
+      <article className="mx-auto max-w-3xl py-12 sm:py-16">
+        <header className="mb-8 border-b border-hairline pb-7">
+          <p className="kicker mb-3">Privacy and data use</p>
+          <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">Privacy policy</h1>
+          <p className="mt-4 text-sm text-ink-3">Effective date: October 30, 2026</p>
+        </header>
+
+        <div className="space-y-8 text-sm leading-7 text-ink-2">
+          <section>
+            <h2 className="font-display text-xl font-bold text-ink-1">What this service does</h2>
+            <p className="mt-2">
+              iEXPENSES is a personal expense-recording application operated under the
+              Barusology project. You can create an account, enter expense details, and
+              review summaries. It is not a bank connection, payment service, or financial
+              adviser. Do not enter bank passwords, payment-card numbers, or other
+              credentials into expense notes.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-display text-xl font-bold text-ink-1">Information processed</h2>
+            <ul className="mt-2 list-disc space-y-2 pl-5">
+              <li>
+                <strong className="text-ink-1">Account information:</strong> email address,
+                authentication identifiers, and profile details you provide when signing
+                in with email or Google.
+              </li>
+              <li>
+                <strong className="text-ink-1">Expense information:</strong> amounts,
+                dates, currencies, merchants, categories, notes, and receipt images you
+                choose to attach.
+              </li>
+              <li>
+                <strong className="text-ink-1">Technical and usage information:</strong>{" "}
+                browser and device details, page visits, and product interactions processed
+                by the analytics tools configured for the site.
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="font-display text-xl font-bold text-ink-1">Service providers</h2>
+            <p className="mt-2">
+              The application uses Supabase for authentication and database services. If
+              you choose receipt scanning, the receipt image is sent to the configured
+              receipt-recognition service for extraction; extracted values should be
+              reviewed before saving. Google Analytics and PostHog are used to understand
+              site usage and improve the service.
+            </p>
+            <p className="mt-2">
+              These providers process information under their own terms and privacy
+              practices. The service may also disclose information when required by law,
+              to protect the service and its users, or to respond to a valid legal request.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-display text-xl font-bold text-ink-1">Advertising and cookies</h2>
+            <p className="mt-2">
+              Google AdSense is enabled only on the public homepage and expense-tracking
+              guide, where publisher content is provided. The sign-in, sign-up, dashboard,
+              transaction, analytics, profile, and privacy pages do not load the AdSense
+              script. Google and its partners may use cookies or similar technologies to
+              deliver, measure, and personalize ads as permitted by your settings and
+              applicable requirements.
+            </p>
+            <p className="mt-2">
+              You can review or change Google ad personalization settings at{" "}
+              <a className="underline" href="https://myadcenter.google.com/" target="_blank" rel="noreferrer">
+                Google My Ad Center
+              </a>
+              . Your browser also provides controls for cookies. Blocking cookies may affect
+              some site or advertising features.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-display text-xl font-bold text-ink-1">Retention and your choices</h2>
+            <p className="mt-2">
+              Account and expense records are processed to provide the features you use.
+              The application does not currently provide a self-service account deletion
+              control. To ask about access, correction, or deletion of account information,
+              contact the project through the{" "}
+              <a
+                className="underline"
+                href="https://github.com/Barusology/iexpenses/issues"
+                target="_blank"
+                rel="noreferrer"
+              >
+                iEXPENSES project page
+              </a>
+              ; do not include passwords, receipts, or other sensitive personal information
+              in a public issue.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-display text-xl font-bold text-ink-1">Changes to this policy</h2>
+            <p className="mt-2">
+              This policy may be updated when the service or its providers change. The
+              effective date above identifies the latest published version. Continued use
+              after an update is subject to the revised policy.
+            </p>
+          </section>
+        </div>
+      </article>
+    </PublicSiteLayout>
+  );
+}
