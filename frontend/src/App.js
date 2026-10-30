@@ -2,8 +2,10 @@ import React, { useEffect, useRef } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
+import { CookieConsentProvider, useCookieConsent } from "@/context/CookieConsentContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { Toaster } from "sonner";
+import CookieConsent from "@/components/CookieConsent";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AuthCallback from "@/components/AuthCallback";
 import Layout from "@/components/Layout";
@@ -16,6 +18,7 @@ import Profile from "@/pages/Profile";
 import Home from "@/pages/Home";
 import ExpenseTrackingGuide from "@/pages/ExpenseTrackingGuide";
 import Privacy from "@/pages/Privacy";
+import CookiePolicy from "@/pages/CookiePolicy";
 import { PageTransition } from "@/components/motion";
 import {
   getAnalyticsPageLocation,
@@ -24,7 +27,13 @@ import {
 import {
   getPageMetadata,
   shouldLoadAdsense,
+  shouldLoadPostHog,
 } from "@/lib/sitePolicy";
+import {
+  initializeAdsense,
+  initializeGoogleAnalytics,
+  initializePostHog,
+} from "@/lib/optionalScripts";
 
 /**
  * Sonner is frozen to dark in the original build (theme="dark" + !bg-[#0A0A0A]).
@@ -56,6 +65,7 @@ function AppRoutes() {
       <Route path="/" element={<Home />} />
       <Route path="/expense-tracking-guide" element={<ExpenseTrackingGuide />} />
       <Route path="/privacy" element={<Privacy />} />
+      <Route path="/cookies" element={<CookiePolicy />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route
@@ -97,11 +107,11 @@ function AppRoutes() {
 
 function AppRouter() {
   const location = useLocation();
+  const { consent } = useCookieConsent();
   const pageLocation = getAnalyticsPageLocation(location.pathname);
   const metadata = getPageMetadata(location.pathname);
-  const lastPageLocation = useRef(
-    getAnalyticsPageLocation(window.location.pathname),
-  );
+  const lastPageLocation = useRef(null);
+  const wasAdsEligible = useRef(shouldLoadAdsense(window.location.pathname));
   useEffect(() => {
     document.title = metadata.title;
 
@@ -129,25 +139,23 @@ function AppRouter() {
     }
     canonical.href = `${window.location.origin}${metadata.path}`;
 
-    const adsenseScript = document.getElementById("google-adsense-script");
-    if (shouldLoadAdsense(location.pathname)) {
-      if (!adsenseScript) {
-        const script = document.createElement("script");
-        script.id = "google-adsense-script";
-        script.async = true;
-        script.crossOrigin = "anonymous";
-        script.src =
-          "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5817549134036094";
-        script.addEventListener("error", () => {
-          console.error("Failed to load the Google AdSense script.");
-        }, { once: true });
-        document.head.appendChild(script);
+    const adsEligible = shouldLoadAdsense(location.pathname);
+    const leftAdsEligiblePage = wasAdsEligible.current && !adsEligible;
+    wasAdsEligible.current = adsEligible;
+
+    if (consent === "accepted") {
+      if (leftAdsEligiblePage) {
+        window.location.reload();
+        return;
       }
-    } else {
-      adsenseScript?.remove();
+      initializeGoogleAnalytics(pageLocation);
+      if (shouldLoadPostHog(location.pathname)) initializePostHog();
+      if (adsEligible) initializeAdsense();
     }
   }, [
     location.pathname,
+    pageLocation,
+    consent,
     metadata.title,
     metadata.description,
     metadata.index,
@@ -155,12 +163,13 @@ function AppRouter() {
   ]);
 
   useEffect(() => {
+    if (consent !== "accepted") return;
     if (!shouldTrackAnalyticsPageView(location)) return;
     if (pageLocation === lastPageLocation.current) return;
     lastPageLocation.current = pageLocation;
     if (typeof window.gtag !== "function") return;
     window.gtag("event", "page_view", { page_location: pageLocation });
-  }, [location, pageLocation]);
+  }, [location, pageLocation, consent]);
 
   const hasCode = new URLSearchParams(location.search).has("code");
   const hasToken = location.hash && (location.hash.includes("access_token=") || location.hash.includes("id_token="));
@@ -173,14 +182,17 @@ function AppRouter() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <BrowserRouter>
-        <AuthProvider>
-          <AppRouter />
-          <ThemedToaster />
-        </AuthProvider>
-      </BrowserRouter>
-    </ThemeProvider>
+    <CookieConsentProvider>
+      <ThemeProvider>
+        <BrowserRouter>
+          <AuthProvider>
+            <AppRouter />
+            <ThemedToaster />
+            <CookieConsent />
+          </AuthProvider>
+        </BrowserRouter>
+      </ThemeProvider>
+    </CookieConsentProvider>
   );
 }
 

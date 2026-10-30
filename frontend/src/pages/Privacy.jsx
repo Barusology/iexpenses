@@ -50,8 +50,9 @@ export default function Privacy() {
               The application uses Supabase for authentication and database services. If
               you choose receipt scanning, the receipt image is sent to the configured
               receipt-recognition service for extraction; extracted values should be
-              reviewed before saving. Google Analytics and PostHog are used to understand
-              site usage and improve the service.
+              reviewed before saving. Google Analytics is loaded only if you accept
+              optional cookies. PostHog analytics and session recording are limited to
+              the public homepage and guide and also require consent.
             </p>
             <p className="mt-2">
               These providers process information under their own terms and privacy
@@ -63,20 +64,27 @@ export default function Privacy() {
           <section>
             <h2 className="font-display text-xl font-bold text-ink-1">Advertising and cookies</h2>
             <p className="mt-2">
-              Google AdSense is enabled only on the public homepage and expense-tracking
-              guide, where publisher content is provided. The sign-in, sign-up, dashboard,
-              transaction, analytics, profile, and privacy pages do not load the AdSense
-              script. Google and its partners may use cookies or similar technologies to
-              deliver, measure, and personalize ads as permitted by your settings and
-              applicable requirements.
+              Google AdSense is loaded only after you accept optional cookies and only on
+              the public homepage and expense-tracking guide, where publisher content is
+              provided. It is not loaded on sign-in, sign-up, dashboard, transaction,
+              analytics, profile, privacy, or cookie-policy pages. Google and its partners
+              may use cookies or similar technologies to deliver, measure, and personalize
+              ads as permitted by your settings and applicable requirements. PostHog
+              session recording is also limited to those public content pages and is not
+              enabled on authenticated expense screens.
             </p>
             <p className="mt-2">
               You can review or change Google ad personalization settings at{" "}
               <a className="underline" href="https://myadcenter.google.com/" target="_blank" rel="noreferrer">
                 Google My Ad Center
               </a>
-              . Your browser also provides controls for cookies. Blocking cookies may affect
-              some site or advertising features.
+              . You can change your site choice with the Cookie settings control. See our{" "}
+              <a className="underline" href="/cookies">cookie policy</a> for details.
+            </p>
+            <p className="mt-2">
+              Supabase authentication and the site’s theme preference use browser storage
+              to provide core features. Optional analytics and advertising do not load
+              until you accept them through the consent controls.
             </p>
           </section>
 

@@ -17,6 +17,12 @@ const PAGE_METADATA = {
       "Read how iEXPENSES handles account information, expense records, analytics, and advertising technologies.",
     index: true,
   },
+  "/cookies": {
+    title: "Cookie Policy | iEXPENSES",
+    description:
+      "Learn which essential and optional cookies iEXPENSES uses and how to accept, reject, or change your cookie choices.",
+    index: true,
+  },
   "/login": {
     title: "Sign In | iEXPENSES",
     description: "Sign in to your iEXPENSES personal expense tracker.",
@@ -49,7 +55,7 @@ const PAGE_METADATA = {
   },
 };
 
-const ADSENSE_ROUTES = new Set(["/", "/expense-tracking-guide"]);
+const PUBLIC_CONTENT_ROUTES = new Set(["/", "/expense-tracking-guide"]);
 
 function normalizePath(pathname) {
   if (pathname === "/") return pathname;
@@ -70,5 +76,9 @@ export function getPageMetadata(pathname) {
 }
 
 export function shouldLoadAdsense(pathname) {
-  return ADSENSE_ROUTES.has(normalizePath(pathname));
+  return PUBLIC_CONTENT_ROUTES.has(normalizePath(pathname));
+}
+
+export function shouldLoadPostHog(pathname) {
+  return PUBLIC_CONTENT_ROUTES.has(normalizePath(pathname));
 }

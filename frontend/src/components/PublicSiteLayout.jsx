@@ -48,6 +48,7 @@ export default function PublicSiteLayout({ children }) {
           <nav aria-label="Footer navigation" className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <a className="hover:text-ink-1" href="/expense-tracking-guide">Expense tracking guide</a>
             <a className="hover:text-ink-1" href="/privacy">Privacy policy</a>
+            <a className="hover:text-ink-1" href="/cookies">Cookie policy</a>
             <a
               className="inline-flex items-center gap-1 hover:text-ink-1"
               href="https://github.com/Barusology/iexpenses"

@@ -1,4 +1,8 @@
-import { getPageMetadata, shouldLoadAdsense } from "./sitePolicy";
+import {
+  getPageMetadata,
+  shouldLoadAdsense,
+  shouldLoadPostHog,
+} from "./sitePolicy";
 
 describe("public page policy", () => {
   test.each(["/", "/expense-tracking-guide"])(
@@ -8,8 +12,16 @@ describe("public page policy", () => {
     },
   );
 
+  test.each(["/", "/expense-tracking-guide"])(
+    "allows PostHog only on publisher-content page %s",
+    (path) => {
+      expect(shouldLoadPostHog(path)).toBe(true);
+    },
+  );
+
   test.each([
     "/privacy",
+    "/cookies",
     "/login",
     "/signup",
     "/dashboard",
@@ -19,6 +31,7 @@ describe("public page policy", () => {
     "/unknown",
   ])("does not load AdSense on non-content page %s", (path) => {
     expect(shouldLoadAdsense(path)).toBe(false);
+    expect(shouldLoadPostHog(path)).toBe(false);
   });
 
   test.each(["/login", "/signup", "/dashboard", "/transactions", "/analytics", "/profile"])(
