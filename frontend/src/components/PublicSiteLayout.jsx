@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight, Wallet } from "lucide-react";
+import { Wallet } from "lucide-react";
 
 export default function PublicSiteLayout({ children }) {
   return (
@@ -44,19 +44,14 @@ export default function PublicSiteLayout({ children }) {
 
       <footer className="mt-20 border-t border-hairline">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-8 text-sm text-ink-3 sm:flex-row sm:items-center sm:justify-between">
-          <p>iEXPENSES helps you record and understand personal spending.</p>
+          <div className="space-y-1">
+            <p>Powered by Barusology INITIATIVE</p>
+            <p>© 2026 iEXPENSES. All rights reserved.</p>
+          </div>
           <nav aria-label="Footer navigation" className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <a className="hover:text-ink-1" href="/expense-tracking-guide">Expense tracking guide</a>
             <a className="hover:text-ink-1" href="/privacy">Privacy policy</a>
             <a className="hover:text-ink-1" href="/cookies">Cookie policy</a>
-            <a
-              className="inline-flex items-center gap-1 hover:text-ink-1"
-              href="https://github.com/Barusology/iexpenses"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Project details <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-            </a>
           </nav>
         </div>
       </footer>
