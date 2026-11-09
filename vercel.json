@@ -5,9 +5,15 @@
   "outputDirectory": "frontend/build",
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/",
       "has": [{ "type": "host", "value": "iexpenses.vercel.app" }],
-      "destination": "https://iexpenses.xyz/:path*",
+      "destination": "https://iexpenses.xyz/",
+      "permanent": true
+    },
+    {
+      "source": "/:path+",
+      "has": [{ "type": "host", "value": "iexpenses.vercel.app" }],
+      "destination": "https://iexpenses.xyz/:path+",
       "permanent": true
     }
   ],
