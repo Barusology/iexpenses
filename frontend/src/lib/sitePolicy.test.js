@@ -1,10 +1,19 @@
 import {
+  SITE_ORIGIN,
   getPageMetadata,
   shouldLoadAdsense,
   shouldLoadPostHog,
 } from "./sitePolicy";
 
 describe("public page policy", () => {
+  test("canonical origin is the live custom domain, not a deployment host", () => {
+    expect(SITE_ORIGIN).toBe("https://iexpenses.xyz");
+    expect(SITE_ORIGIN).not.toContain("vercel.app");
+    expect(`${SITE_ORIGIN}${getPageMetadata("/expense-tracking-guide").path}`).toBe(
+      "https://iexpenses.xyz/expense-tracking-guide",
+    );
+  });
+
   test.each(["/", "/expense-tracking-guide"])(
     "allows AdSense on publisher-content page %s",
     (path) => {

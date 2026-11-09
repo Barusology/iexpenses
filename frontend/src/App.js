@@ -25,6 +25,7 @@ import {
   shouldTrackAnalyticsPageView,
 } from "@/lib/analyticsPrivacy";
 import {
+  SITE_ORIGIN,
   getPageMetadata,
   shouldLoadAdsense,
   shouldLoadPostHog,
@@ -137,7 +138,7 @@ function AppRouter() {
       canonical.rel = "canonical";
       document.head.appendChild(canonical);
     }
-    canonical.href = `${window.location.origin}${metadata.path}`;
+    canonical.href = `${SITE_ORIGIN}${metadata.path}`;
 
     const adsEligible = shouldLoadAdsense(location.pathname);
     const leftAdsEligiblePage = wasAdsEligible.current && !adsEligible;

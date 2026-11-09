@@ -1,3 +1,5 @@
+export const SITE_ORIGIN = "https://iexpenses.xyz";
+
 const PAGE_METADATA = {
   "/": {
     title: "iEXPENSES | Personal Expense Tracker",
