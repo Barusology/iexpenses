@@ -57,7 +57,7 @@ const PAGE_METADATA = {
   },
 };
 
-const PUBLIC_CONTENT_ROUTES = new Set(["/", "/expense-tracking-guide"]);
+const PUBLIC_CONTENT_ROUTES = new Set(["/", "/expense-tracking-guide", "/privacy", "/cookies"]);
 
 function normalizePath(pathname) {
   if (pathname === "/") return pathname;
