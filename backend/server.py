@@ -36,7 +36,6 @@ CATEGORY_IDS = [
 class OCRInput(BaseModel):
     image_base64: str
 
-# ---- Auth via Supabase API ----
 async def get_current_user(authorization: Optional[str] = Header(default=None)) -> dict:
     if not authorization or not authorization.lower().startswith("bearer "):
         raise HTTPException(status_code=401, detail="Not authenticated")
