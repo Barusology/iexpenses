@@ -21,13 +21,27 @@ export default function PublicSiteLayout({ children }) {
             </span>
             <span className="font-display text-lg font-bold tracking-tight">iEXPENSES</span>
           </a>
-          <nav aria-label="Main navigation" className="flex items-center gap-4 text-sm">
-            <a className="hidden text-ink-2 hover:text-ink-1 sm:inline" href="/expense-tracking-guide">
-              Expense guide
+          <nav aria-label="Main navigation" className="flex items-center gap-3 text-sm sm:gap-4">
+            <a className="hidden text-ink-2 hover:text-ink-1 sm:inline" href="/guides">
+              Guides
             </a>
-            <a className="hidden text-ink-2 hover:text-ink-1 sm:inline" href="/privacy">
-              Privacy
+            <a className="hidden text-ink-2 hover:text-ink-1 md:inline" href="/receipt-scanner">
+              Receipt scanner
             </a>
+            <a className="hidden text-ink-2 hover:text-ink-1 lg:inline" href="/about">
+              About
+            </a>
+            <details className="relative sm:hidden">
+              <summary className="cursor-pointer list-none rounded-full border border-hairline-strong px-3 py-2 font-semibold hover:bg-tint-hover">
+                Explore
+              </summary>
+              <div className="absolute right-0 top-full z-30 mt-2 grid min-w-48 gap-1 rounded-xl border border-hairline bg-surface-1 p-2 shadow-lg">
+                <a className="rounded-lg px-3 py-2 text-ink-2 hover:bg-tint-hover hover:text-ink-1" href="/guides">Guides</a>
+                <a className="rounded-lg px-3 py-2 text-ink-2 hover:bg-tint-hover hover:text-ink-1" href="/receipt-scanner">Receipt scanner</a>
+                <a className="rounded-lg px-3 py-2 text-ink-2 hover:bg-tint-hover hover:text-ink-1" href="/about">About</a>
+                <a className="rounded-lg px-3 py-2 text-ink-2 hover:bg-tint-hover hover:text-ink-1" href="/privacy">Privacy</a>
+              </div>
+            </details>
             <a
               href="/login"
               className="rounded-full border border-hairline-strong px-4 py-2 font-semibold hover:bg-tint-hover"
@@ -49,6 +63,12 @@ export default function PublicSiteLayout({ children }) {
             <p>© 2026 iEXPENSES. All rights reserved.</p>
           </div>
           <nav aria-label="Footer navigation" className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <a className="hover:text-ink-1" href="/guides">All guides</a>
+            <a className="hover:text-ink-1" href="/guides/track-expenses-without-bank-linking">Track without bank linking</a>
+            <a className="hover:text-ink-1" href="/guides/receipt-organization-tips">Organize receipts</a>
+            <a className="hover:text-ink-1" href="/guides/monthly-spending-check-in">Monthly check-in</a>
+            <a className="hover:text-ink-1" href="/receipt-scanner">Receipt scanner</a>
+            <a className="hover:text-ink-1" href="/about">About</a>
             <a className="hover:text-ink-1" href="/expense-tracking-guide">Expense tracking guide</a>
             <a className="hover:text-ink-1" href="/privacy">Privacy policy</a>
             <a className="hover:text-ink-1" href="/cookies">Cookie policy</a>

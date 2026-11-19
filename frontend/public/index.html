@@ -4,8 +4,31 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
-        <meta name="description" content="A practical expense tracker and clear guide to recording purchases, organizing spending, and reviewing your month." />
+        <title>iExpenses - Personal Expense Tracker &amp; AI Receipt Scanner</title>
+        <meta
+            name="description"
+            content="Track daily personal expenses, scan receipts with AI OCR, and analyze monthly spending categories without linking your bank account."
+        />
         <link rel="canonical" href="https://iexpenses.xyz/" />
+        <meta name="robots" content="index, follow" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://iexpenses.xyz/" />
+        <meta property="og:title" content="iExpenses - Personal Expense Tracker &amp; AI Receipt Scanner" />
+        <meta
+            property="og:description"
+            content="Log personal purchases, scan receipts with OCR, and view category spending trends."
+        />
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "WebApplication",
+                "name": "iExpenses",
+                "url": "https://iexpenses.xyz/",
+                "applicationCategory": "FinanceApplication",
+                "operatingSystem": "Web",
+                "description": "Personal expense tracker with AI receipt OCR and category analytics."
+            }
+        </script>
         <meta name="google-adsense-account" content="ca-pub-5817549134036094" />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5817549134036094" crossorigin="anonymous"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,13 +48,20 @@
         Learn how to configure a non-root public URL by running `npm run build`.
         -->
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <title>iEXPENSES — Personal Expense Tracker</title>
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
         <script src="https://assets.emergent.sh/scripts/emergent-main.js"></script>
 
     </head>
     <body>
-        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <noscript>
+            <main>
+                <h1>iExpenses - Personal Expense Tracker &amp; AI Receipt OCR</h1>
+                <p>
+                    iExpenses helps you log daily expenses, extract merchant and total details from receipts
+                    using AI OCR, and review spending trends by category without linking bank credentials.
+                </p>
+            </main>
+        </noscript>
         <div id="root"></div>
         <!--
       This HTML file is a template.

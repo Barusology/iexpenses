@@ -21,6 +21,28 @@ describe("public page policy", () => {
     },
   );
 
+  test.each([
+    "/guides",
+    "/guides/track-expenses-without-bank-linking",
+    "/guides/receipt-organization-tips",
+    "/guides/monthly-spending-check-in",
+    "/receipt-scanner",
+    "/about",
+  ])("indexes public editorial page %s", (path) => {
+    expect(getPageMetadata(path).index).toBe(true);
+  });
+
+  test.each([
+    "/guides",
+    "/guides/track-expenses-without-bank-linking",
+    "/guides/receipt-organization-tips",
+    "/guides/monthly-spending-check-in",
+    "/receipt-scanner",
+  ])("allows content analytics on %s", (path) => {
+    expect(shouldLoadAdsense(path)).toBe(true);
+    expect(shouldLoadPostHog(path)).toBe(true);
+  });
+
   test.each(["/", "/expense-tracking-guide"])(
     "allows PostHog only on publisher-content page %s",
     (path) => {
@@ -31,6 +53,7 @@ describe("public page policy", () => {
   test.each([
     "/privacy",
     "/cookies",
+    "/about",
     "/login",
     "/signup",
     "/dashboard",

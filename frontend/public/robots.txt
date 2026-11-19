@@ -1,4 +1,17 @@
 User-agent: *
 Allow: /
+Allow: /guides
+Allow: /receipt-scanner
+Allow: /about
+Allow: /privacy
+Allow: /cookies
+
+Disallow: /dashboard
+Disallow: /transactions
+Disallow: /analytics
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+Disallow: /register
 
 Sitemap: https://iexpenses.xyz/sitemap.xml

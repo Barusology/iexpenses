@@ -2,9 +2,45 @@ export const SITE_ORIGIN = "https://iexpenses.xyz";
 
 const PAGE_METADATA = {
   "/": {
-    title: "iEXPENSES | Personal Expense Tracker",
+    title: "iExpenses - Personal Expense Tracker & AI Receipt Scanner",
     description:
-      "Record everyday spending, organize expenses, and review clear monthly trends with the iEXPENSES personal expense tracker.",
+      "Track daily personal expenses, scan receipts with AI OCR, and analyze monthly spending categories without linking your bank account.",
+    index: true,
+  },
+  "/guides": {
+    title: "Personal Expense Guides | iExpenses",
+    description:
+      "Practical, step-by-step guides to tracking purchases, organizing receipts, and building a useful monthly spending review.",
+    index: true,
+  },
+  "/guides/track-expenses-without-bank-linking": {
+    title: "How to Track Expenses Without Linking Your Bank | iExpenses",
+    description:
+      "A practical method for recording personal expenses manually, protecting account access, and building a useful spending history.",
+    index: true,
+  },
+  "/guides/receipt-organization-tips": {
+    title: "How to Organize Receipts for Monthly Budgeting | iExpenses",
+    description:
+      "Learn how to capture, verify, categorize, and review paper and digital receipts as part of a consistent monthly spending routine.",
+    index: true,
+  },
+  "/guides/monthly-spending-check-in": {
+    title: "A 15-Minute Monthly Spending Check-In | iExpenses",
+    description:
+      "Use a concise monthly review to check records, understand category changes, and choose a realistic next step.",
+    index: true,
+  },
+  "/receipt-scanner": {
+    title: "AI Receipt Scanner for Personal Expenses | iExpenses",
+    description:
+      "Learn how receipt OCR can extract purchase details, what to verify before saving, and how iExpenses handles the scanning workflow.",
+    index: true,
+  },
+  "/about": {
+    title: "About iExpenses | Personal Expense Tracking",
+    description:
+      "Learn about iExpenses, a personal expense tracker for recording purchases, organizing spending, and reviewing your own records.",
     index: true,
   },
   "/expense-tracking-guide": {
@@ -57,7 +93,15 @@ const PAGE_METADATA = {
   },
 };
 
-const PUBLIC_CONTENT_ROUTES = new Set(["/", "/expense-tracking-guide", "/privacy", "/cookies"]);
+const PUBLIC_CONTENT_ROUTES = new Set([
+  "/",
+  "/guides",
+  "/guides/track-expenses-without-bank-linking",
+  "/guides/receipt-organization-tips",
+  "/guides/monthly-spending-check-in",
+  "/receipt-scanner",
+  "/expense-tracking-guide",
+]);
 
 function normalizePath(pathname) {
   if (pathname === "/") return pathname;

@@ -28,4 +28,17 @@ describe("analytics URL privacy", () => {
   test("allows ordinary routes without auth credentials", () => {
     expect(shouldTrackAnalyticsPageView({ search: "", hash: "" })).toBe(true);
   });
+
+  test.each([
+    "/guides",
+    "/guides/track-expenses-without-bank-linking",
+    "/guides/receipt-organization-tips",
+    "/guides/monthly-spending-check-in",
+    "/receipt-scanner",
+    "/about",
+  ])("allowlists public route %s", (path) => {
+    expect(getAnalyticsPageLocation(path, "https://example.test")).toBe(
+      `https://example.test${path}`,
+    );
+  });
 });

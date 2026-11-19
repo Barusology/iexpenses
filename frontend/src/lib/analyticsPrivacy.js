@@ -1,5 +1,11 @@
 const ANALYTICS_ROUTES = new Set([
   "/",
+  "/guides",
+  "/guides/track-expenses-without-bank-linking",
+  "/guides/receipt-organization-tips",
+  "/guides/monthly-spending-check-in",
+  "/receipt-scanner",
+  "/about",
   "/expense-tracking-guide",
   "/privacy",
   "/cookies",

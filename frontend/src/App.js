@@ -19,13 +19,19 @@ import Home from "@/pages/Home";
 import ExpenseTrackingGuide from "@/pages/ExpenseTrackingGuide";
 import Privacy from "@/pages/Privacy";
 import CookiePolicy from "@/pages/CookiePolicy";
+import Guides from "@/pages/Guides";
+import TrackWithoutBankLinking from "@/pages/guides/TrackWithoutBankLinking";
+import ReceiptOrganizationTips from "@/pages/guides/ReceiptOrganizationTips";
+import MonthlySpendingCheckIn from "@/pages/guides/MonthlySpendingCheckIn";
+import ReceiptScanner from "@/pages/ReceiptScanner";
+import About from "@/pages/About";
+import SeoHead from "@/components/SeoHead";
 import { PageTransition } from "@/components/motion";
 import {
   getAnalyticsPageLocation,
   shouldTrackAnalyticsPageView,
 } from "@/lib/analyticsPrivacy";
 import {
-  SITE_ORIGIN,
   getPageMetadata,
   shouldLoadAdsense,
   shouldLoadPostHog,
@@ -64,11 +70,18 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/guides" element={<Guides />} />
+      <Route path="/guides/track-expenses-without-bank-linking" element={<TrackWithoutBankLinking />} />
+      <Route path="/guides/receipt-organization-tips" element={<ReceiptOrganizationTips />} />
+      <Route path="/guides/monthly-spending-check-in" element={<MonthlySpendingCheckIn />} />
+      <Route path="/receipt-scanner" element={<ReceiptScanner />} />
+      <Route path="/about" element={<About />} />
       <Route path="/expense-tracking-guide" element={<ExpenseTrackingGuide />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/cookies" element={<CookiePolicy />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/register" element={<Navigate to="/signup" replace />} />
       <Route
         path="/dashboard"
         element={
@@ -114,32 +127,6 @@ function AppRouter() {
   const lastPageLocation = useRef(null);
   const wasAdsEligible = useRef(shouldLoadAdsense(window.location.pathname));
   useEffect(() => {
-    document.title = metadata.title;
-
-    let description = document.querySelector('meta[name="description"]');
-    if (!description) {
-      description = document.createElement("meta");
-      description.name = "description";
-      document.head.appendChild(description);
-    }
-    description.content = metadata.description;
-
-    let robots = document.querySelector('meta[name="robots"]');
-    if (!robots) {
-      robots = document.createElement("meta");
-      robots.name = "robots";
-      document.head.appendChild(robots);
-    }
-    robots.content = metadata.index ? "index,follow" : "noindex,nofollow";
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.rel = "canonical";
-      document.head.appendChild(canonical);
-    }
-    canonical.href = `${SITE_ORIGIN}${metadata.path}`;
-
     const adsEligible = shouldLoadAdsense(location.pathname);
     const leftAdsEligiblePage = wasAdsEligible.current && !adsEligible;
     wasAdsEligible.current = adsEligible;
@@ -157,10 +144,6 @@ function AppRouter() {
     location.pathname,
     pageLocation,
     consent,
-    metadata.title,
-    metadata.description,
-    metadata.index,
-    metadata.path,
   ]);
 
   useEffect(() => {
@@ -175,10 +158,30 @@ function AppRouter() {
   const hasCode = new URLSearchParams(location.search).has("code");
   const hasToken = location.hash && (location.hash.includes("access_token=") || location.hash.includes("id_token="));
   if (hasCode || hasToken) {
-    return <AuthCallback />;
+    return (
+      <>
+        <SeoHead
+          title={metadata.title}
+          description={metadata.description}
+          canonicalPath={metadata.path}
+          noIndex={!metadata.index}
+        />
+        <AuthCallback />
+      </>
+    );
   }
 
-  return <AppRoutes />;
+  return (
+    <>
+      <SeoHead
+        title={metadata.title}
+        description={metadata.description}
+        canonicalPath={metadata.path}
+        noIndex={!metadata.index}
+      />
+      <AppRoutes />
+    </>
+  );
 }
 
 function App() {
